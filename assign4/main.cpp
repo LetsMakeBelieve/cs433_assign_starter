@@ -1,65 +1,85 @@
 /**
 * Assignment 4: Producer Consumer Problem
  * @file main.cpp
- * @author ??? (TODO: your name)
+ * @author Mitchell Karan
  * @brief The main program for the producer consumer problem.
  * @version 0.1
  */
-//You must complete the all parts marked as "TODO". Delete "TODO" after you are done.
-// Remember to add sufficient and clear comments to your code
 #include <iostream>
-#include "buffer.h"
+#include <pthread.h>
 #include <unistd.h>
+#include <cstdlib>
+#include "buffer.h"
 
 using namespace std;
 
-// global buffer object
+//global buffer (default size = 5)
 Buffer buffer;
 
-// Producer thread function
-// TODO: Add your implementation of the producer thread here
+//producer thread
 void *producer(void *param) {
-    // Each producer insert its own ID into the buffer
-    // For example, thread 1 will insert 1, thread 2 will insert 2, and so on.
-    buffer_item item = *((int *) param);
+    int id = *((int *) param); //extracts that integer value so the thread can use it (its hard to look at)
+    buffer_item item = id;
 
     while (true) {
-        /* sleep for a random period of time */
-        usleep(rand()%1000000);
-        // TODO: Add synchronization code here
+        usleep(rand() % 1000000);
+
         if (buffer.insert_item(item)) {
-            cout << "Producer " << item << ": Inserted item " << item << endl;
+            cout << "Producer " << id << ": Inserted item " << item << endl;
             buffer.print_buffer();
         } else {
-            cout << "Producer error condition"  << endl;    // shouldn't come here
+            cout << "Producer error condition" << endl;
         }
     }
 }
 
-// Consumer thread function
-// TODO: Add your implementation of the consumer thread here
+//consumer thread
 void *consumer(void *param) {
     buffer_item item;
 
     while (true) {
-        /* sleep for a random period of time */
         usleep(rand() % 1000000);
-        // TODO: Add synchronization code here
+
         if (buffer.remove_item(&item)) {
-            cout << "Consumer " << item << ": Removed item " << item << endl;
+            cout << "Consumer Removed item " << item << endl;
             buffer.print_buffer();
         } else {
-            cout << "Consumer error condition" << endl;    // shouldn't come here
+            cout << "Consumer error condition" << endl;
         }
     }
 }
 
 int main(int argc, char *argv[]) {
-    /* TODO: 1. Get command line arguments argv[1],argv[2],argv[3] */
-    /* TODO: 2. Initialize buffer and synchronization primitives */
-    /* TODO: 3. Create producer thread(s).
-     * You should pass an unique int ID to each producer thread, starting from 1 to number of threads */
-    /* TODO: 4. Create consumer thread(s) */
-    /* TODO: 5. Main thread sleep */
-    /* TODO: 6. Exit */
+    //make sure there are fewer than 4 args else spit out error
+    if (argc != 4) {
+        cerr << "Usage: " << argv[0] << " <sleep time> <num producers> <num consumers>" << endl;
+        return -1;
+    }
+
+    //get command line args
+    int sleep_time = atoi(argv[1]); 
+    int num_producers = atoi(argv[2]);
+    int num_consumers = atoi(argv[3]);
+
+    //initialize threads with command line args
+    pthread_t producers[num_producers];
+    pthread_t consumers[num_consumers];
+    int producer_ids[num_producers];
+
+    //produce
+    for (int i = 0; i < num_producers; ++i) {
+        producer_ids[i] = i + 1;
+        pthread_create(&producers[i], nullptr, producer, &producer_ids[i]);
+    }
+
+    //consume
+    for (int i = 0; i < num_consumers; ++i) {
+        pthread_create(&consumers[i], nullptr, consumer, nullptr);
+    }
+
+    //sleep
+    sleep(sleep_time);
+
+    cout << "Main thread exiting..." << endl;
+    exit(0);
 }

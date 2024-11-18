@@ -1,7 +1,7 @@
 /**
 * Assignment 3: CPU Scheduler
  * @file scheduler_fcfs.h
- * @author ??? (TODO: your name)
+ * @author Mitchell Karan
  * @brief This Scheduler class implements the FCSF scheduling algorithm.
  * @version 0.1
  */
@@ -12,12 +12,18 @@
 #define ASSIGN3_SCHEDULER_FCFS_H
 
 #include "scheduler.h"
+#include <queue>
+
 /**
  * @brief This Scheduler class implements the FCFS scheduling algorithm.
  */
 class SchedulerFCFS : public Scheduler {
 private:
-    // TODO: add necessary member variables here for your implementation
+    float ttime = 0;
+    float wtime = 0;
+    std::queue<PCB> ready_queue;
+    std::vector<PCB> finished_processes;
+    int current_time; //simulate clock
 
 public:
     /**
@@ -27,7 +33,7 @@ public:
     /**
      * @brief Destroy the SchedulerFCFS object
      */
-    ~SchedulerFCFS() override;
+    ~SchedulerFCFS();
 
     /**
      * @brief This function is called once before the simulation starts.

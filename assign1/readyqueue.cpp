@@ -3,56 +3,118 @@
 
 using namespace std;
 
-//You must complete the all parts marked as "TODO". Delete "TODO" after you are done.
-// Remember to add sufficient comments to your code
+//constructor
+ReadyQueue::ReadyQueue() : capacity(500), heapSize(0) {
+    heap = new PCB*[capacity];
+    for (int i = 0; i < capacity; ++i){ //create empty heap
+       heap[i] = nullptr;
+    }
+}
 
+//copy constructor
+ReadyQueue::ReadyQueue(const ReadyQueue& other) : capacity(other.capacity), heapSize(other.heapSize) {
+    heap = new PCB*[capacity];
+    for (int i = 0; i < heapSize; ++i) {
+        heap[i] = new PCB(*other.heap[i]);  // Deep copy each PCB
+    }
+}
 
-/**
- * @brief Constructor for the ReadyQueue class.
- */
- ReadyQueue::ReadyQueue()  {
-     //TODO: add your code here
- }
-
-/**
- *@brief Destructor
-*/
+//destructor
 ReadyQueue::~ReadyQueue() {
-    //TODO: add your code to release dynamically allocate memory
+    delete[] heap; //thank you professor
 }
 
-/**
- * @brief Add a PCB representing a process into the ready queue.
- *
- * @param pcbPtr: the pointer to the PCB to be added
- */
-void ReadyQueue::addPCB(PCB *pcbPtr) {
-    //TODO: add your code here
-    // When adding a PCB to the queue, you must change its state to READY.
+//asignment operator
+ReadyQueue& ReadyQueue::operator=(const ReadyQueue& other) {
+    if (this == &other) {
+        return *this; //self-assignment check
+    }
+
+    //clear data
+    for (int i = 0; i < heapSize; ++i) {
+        delete heap[i];
+    }
+    delete[] heap;
+
+    //copy data from other
+    capacity = other.capacity;
+    heapSize = other.heapSize;
+    heap = new PCB*[capacity];
+    for (int i = 0; i < heapSize; ++i) {
+        heap[i] = new PCB(*other.heap[i]);
+    }
+
+    return *this;
 }
 
-/**
- * @brief Remove and return the PCB with the highest priority from the queue
- *
- * @return PCB*: the pointer to the PCB with the highest priority
- */
+//add a PCB representing a process into the ready queue
+void ReadyQueue::addPCB(PCB* pcbPtr) {
+    if (heapSize >= capacity) {
+        // Optional: Handle the case where the heap is full (e.g., resize or throw an exception)
+        cout << "ReadyQueue is full. Cannot add more PCBs." << endl;
+        return;
+    }
+
+    pcbPtr->setState(ProcState::READY);  // Ensure PCB state is set to READY
+    heap[heapSize] = pcbPtr;
+    heapifyUp(heapSize);
+    ++heapSize;
+}
+
+//remove (and returns) the PCB with the highest priority from the queue
 PCB* ReadyQueue::removePCB() {
-    //TODO: add your code here
-    // When removing a PCB from the queue, you must change its state to RUNNING.
+    if (heapSize == 0) {
+        cout << "ready queue is empty" << endl;
+        return nullptr;
+    }
+
+    PCB* root = heap[0];
+    root->setState(ProcState::RUNNING);  //change state to RUNNING
+    heap[0] = heap[--heapSize];
+    heapifyDown(0);
+    return root;
 }
 
-/**
- * @brief Returns the number of elements in the queue.
- *
- * @return int: the number of PCBs in the queue
- */
+//number of elements in the queue
 int ReadyQueue::size() {
-    //TODO: add your code here
+    return heapSize;
 }
 
-/**
- * @brief Display the PCBs in the queue.
- */
+//show PCBs in the queue
 void ReadyQueue::displayAll() {
-    //TODO: add your code here
+    for (int i = 0; i < heapSize; ++i) {
+        heap[i]->display();
+    }
+}
+
+//maintain heap property while moving up
+void ReadyQueue::heapifyUp(int index) {
+    while (index > 0) {
+        int parentIndex = (index - 1) / 2;
+        if (heap[index]->getPriority() <= heap[parentIndex]->getPriority()) {
+            break;
+        }
+        swap(heap[index], heap[parentIndex]);
+        index = parentIndex;
+    }
+}
+
+//maintain heap property while moving down
+void ReadyQueue::heapifyDown(int index) {
+    int leftChild = 2 * index + 1;
+    int rightChild = 2 * index + 2;
+    int largest = index;
+
+    if (leftChild < heapSize && heap[leftChild]->getPriority() > heap[largest]->getPriority()) {
+        largest = leftChild;
+    }
+
+    if (rightChild < heapSize && heap[rightChild]->getPriority() > heap[largest]->getPriority()) {
+        largest = rightChild;
+    }
+
+    if (largest != index) {
+        swap(heap[index], heap[largest]);
+        heapifyDown(largest);
+    }
 }

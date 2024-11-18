@@ -1,13 +1,12 @@
 /**
 * Assignment 3: CPU Scheduler
  * @file scheduler.h
- * @author ??? (TODO: your name)
+ * @author Mitchell Karan
  * @brief This is the header file for the base Scheduler class. Specific schedulers, e.g. FCFS, SJF and RR, inherit
  *        this base class.
  * @version 0.1
  */
-//You must complete the all parts marked as "TODO". Delete "TODO" after you are done.
-// Remember to add sufficient and clear comments to your code
+
 #pragma once
 
 #include <vector>

@@ -1,13 +1,10 @@
 /**
  * Assignment 1: priority queue of processes
  * @file pcb.h
- * @author ??? (TODO: your name)
+ * @author Mitchell Karan
  * @brief This is the header file for the PCB class, a process control block.
  * @version 0.1
  */
-//You must complete the all parts marked as "TODO". Delete "TODO" after you are done.
-// Remember to addPCB sufficient comments to your code
-
 #pragma once
 #include <iostream>
 using namespace std;
@@ -17,26 +14,26 @@ using namespace std;
 enum class ProcState {NEW, READY, RUNNING, WAITING, TERMINATED};
 
 /**
- * @brief A process control block (PCB) Process control block(PCB) is a data structure representing a process in the system.
-   A process should have at least an ID and a state(i.e.NEW, READY, RUNNING, WAITING or TERMINATED).
-   It may also have other attributes, such as scheduling information (e.g. priority)
+ * @brief A process control block (PCB) is a data structure representing a process in the system.
+ * A process should have at least an ID and a state (i.e., NEW, READY, RUNNING, WAITING, or TERMINATED).
+ * It may also have other attributes, such as scheduling information (e.g., priority).
  *
  */
 class PCB {
 public:
     // The unique process ID
-	unsigned int id;
+    unsigned int id;
     // The priority of a process valued between 1-50. Larger number represents higher priority
-	unsigned int priority;
-	// The current state of the process.
-	// A process in the ReadyQueue should be in READY state
-	ProcState state;
+    unsigned int priority;
+    // The current state of the process.
+    // A process in the ReadyQueue should be in READY state
+    ProcState state;
 
-	/**
-	 * @brief Construct a new PCB object
-	 * @param id: each process has a unique ID
-	 * @param priority: the priority of the process in the range 1-50. Larger number represents higher priority
-	 * @param state the state of the process.
+    /**
+     * @brief Construct a new PCB object
+     * @param id: each process has a unique ID
+     * @param priority: the priority of the process in the range 1-50. Larger number represents higher priority
+     * @param state: the state of the process.
      */
     PCB(unsigned int id = 0, unsigned int priority = 1, ProcState state = ProcState::NEW) {
         this->id = id;
@@ -55,7 +52,7 @@ public:
      *
      * @return unsigned int: the ID of the PCB
      */
-    unsigned int getID() {
+    unsigned int getID() const {
         return id;
     }
 
@@ -64,7 +61,7 @@ public:
      *
      * @return unsigned int: the priority of the PCB
      */
-    unsigned int getPriority() {
+    unsigned int getPriority() const {
         return priority;
     }
 
@@ -73,24 +70,29 @@ public:
      *
      * @return ProcState: the state of the PCB
      */
-    ProcState getState() {
+    ProcState getState() const {
         return state;
     }
 
     /**
      * @brief Change the state of the PCB.
-     * @param state
+     * @param state: the new state of the PCB
      */
     void setState(ProcState state) {
-        // TODO: add your code here
+        this->state = state;
     }
 
     /**
      * @brief Change the priority of the PCB.
-     * @param priority
+     * @param priority: the new priority of the PCB
      */
     void setPriority(unsigned int priority) {
-        // TODO: add your code here
+        // Ensure priority is within the valid range [1, 50]
+        if (priority >= 1 && priority <= 50) {
+            this->priority = priority;
+        } else {
+            cerr << "Error: Priority must be between 1 and 50." << endl;
+        }
     }
 
     /**
@@ -100,7 +102,7 @@ public:
     void display() const {
         cout << "ID: " << id;
         cout << ", Priority: " << priority;
-        cout << ", State: " ;
+        cout << ", State: ";
         switch(state) {
             case ProcState::NEW:
                 cout << "NEW";
@@ -117,7 +119,7 @@ public:
             case ProcState::TERMINATED:
                 cout << "TERMINATED";
                 break;
-        } 
+        }
         cout << endl;
     }
 };

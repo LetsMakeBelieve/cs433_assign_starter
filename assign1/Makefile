@@ -1,12 +1,13 @@
 ###################################
 # OS COURSE - CS 433 example
 # 
+#commands: make, ./test1, ./test2, and make clean
 ###################################
 CC = g++			# use g++ for compiling c++ code or gcc for c code
-CFLAGS = -g -Wall -std=c++17		# compilation flags: -g for debugging. Change to -O2 or -O3 for optimized code.
+CFLAGS = -O2 -Wall -std=c++17		# compilation flags: -g for debugging. Change to -O2 or -O3 for optimized code.
 LIB = -lm			# linked libraries	
 LDFLAGS = -L.			# link flags
-PROG = test1 test2			# target executables (output)
+PROG = test1 test2			# target executables (output)cd
 SRCS = test1.cpp test2.cpp pcbtable.cpp readyqueue.cpp        # .c or .cpp source files.
 OBJ = $(SRCS:.cpp=.o) 	# object files for the target. Add more to this and next lines if there are more than one source files.
 

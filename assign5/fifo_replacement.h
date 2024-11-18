@@ -1,7 +1,7 @@
 /**
 * Assignment 5: Page replacement algorithms
  * @file fifo_replacement.h
- * @author ??? (TODO: your name)
+ * @author Mitchell Karan
  * @brief A class implementing the FIFO page replacement algorithms
  * @version 0.1
  */
@@ -13,13 +13,17 @@
 // Remember to add comments to your code
 
 #include "replacement.h"
+#include <queue>
+#include <unordered_map>
 
 /**
  * @brief A class to simulate FIFO page replacement algorithm.
  */
 class FIFOReplacement : public Replacement {
 private:
-    // TODO: Add necessary member variables to this class
+    std::queue<int> page_queue; //keep track of pages in FIFO order
+    std::unordered_map<int, int> page_table; //maps page number to frame index
+
 
 public:
     /**

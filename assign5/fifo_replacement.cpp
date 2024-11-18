@@ -1,7 +1,7 @@
 /**
 * Assignment 5: Page replacement algorithms
  * @file fifo_replacement.cpp
- * @author ??? (TODO: your name)
+ * @author Mitchell Karan
  * @brief A class implementing the FIFO page replacement algorithms
  * @version 0.1
  */
@@ -10,25 +10,31 @@
 
 #include "fifo_replacement.h"
 
-// TODO: Add your implementation here
 FIFOReplacement::FIFOReplacement(int num_pages, int num_frames)
-: Replacement(num_pages, num_frames)
-{
-    // TODO: Add additional implementation code
+    : Replacement(num_pages, num_frames) {
+
 }
 
-// TODO: Add your implementations for desctructor, load_page, replace_page here
 FIFOReplacement::~FIFOReplacement() {
-    // TODO: Add necessary code here
 }
 
-// Access an invalid page, but free frames are available
 void FIFOReplacement::load_page(int page_num) {
-    // TODO: Update your data structure FIFO replacement and pagetable
+    // Add the page to the FIFO queue and update the page table.
+    page_queue.push(page_num);
+    page_table[page_num] = page_queue.size() - 1; // Map page to frame index.
 }
 
-// Access an invalid page and no free frames are available
 int FIFOReplacement::replace_page(int page_num) {
-    // TODO: Update your data structure FIFO replacement and pagetable
-    return 0;
+    // Replace the oldest page in the queue.
+    int victim_page = page_queue.front(); // Get the oldest page.
+    page_queue.pop(); // Remove it from the queue.
+
+    // Remove the victim from the page table.
+    page_table.erase(victim_page);
+
+    // Add the new page to the page table and queue.
+    page_queue.push(page_num);
+    page_table[page_num] = page_queue.size() - 1;
+
+    return victim_page; // Return the page that was replaced.
 }

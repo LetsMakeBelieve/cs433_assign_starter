@@ -1,7 +1,7 @@
 /**
  * Assignment 1: priority queue of processes
  * @file readyqueue.h
- * @author ??? (TODO: your name)
+ * @author Mitchell Karan
  * @brief ReadyQueue is a queue of PCB's that are in the READY state to be scheduled to run.
  * It should be a priority queue such that the process with the highest priority can be selected next.
  * @version 0.1
@@ -18,8 +18,14 @@
  */
 class ReadyQueue {
 private:
-    // TODO: add your private member variables here
-    // choose a data structure for the ReadyQueue. No STL class is allowed.
+    // Internal data structure to hold the PCBs
+    PCB** heap;       //array of PCB pointers
+    int capacity;     //capacity of the heap
+    int heapSize;     //number of elements in the heap
+
+    // Helper functions for heap operations
+    void heapifyUp(int index);
+    void heapifyDown(int index);
 
 public:
     /**
@@ -27,38 +33,50 @@ public:
      *
      */
     ReadyQueue();
+    ReadyQueue(const ReadyQueue& other);
+
+    /**
+     * @brief Construct a new ReadyQueue object with specified capacity
+     *
+     * @param capacity: the initial capacity of the queue
+     */
+    ReadyQueue(int capacity);
+
+    /**
+     * @brief Overwrite a readyqueue object with another
+     *
+     * @param other: the ReadyQueue object that is overwriting this one
+     */
+    ReadyQueue& operator=(const ReadyQueue& other);
 
     /**
      * @brief Destructor
      */
     ~ReadyQueue();
 
-	// You may add additional member functions, but don't change the definitions of the following four member functions.
-
     /**
      * @brief Add a PCB representing a process into the ready queue.
      *
      * @param pcbPtr: the pointer to the PCB to be added
      */
-	void addPCB(PCB* pcbPtr);
+    void addPCB(PCB* pcbPtr);
 
     /**
      * @brief Remove and return the PCB with the highest priority from the queue
      *
      * @return PCB*: the pointer to the PCB with the highest priority
      */
-	PCB* removePCB();
+    PCB* removePCB();
 
     /**
      * @brief Returns the number of elements in the queue.
      *
      * @return int: the number of PCBs in the queue
      */
-	int size();
+    int size();
 
-     /**
-      * @brief Display the PCBs in the queue.
-      */
-	void displayAll();
-
+    /**
+     * @brief Display the PCBs in the queue.
+     */
+    void displayAll();
 };

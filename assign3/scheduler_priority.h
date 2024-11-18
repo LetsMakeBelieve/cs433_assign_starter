@@ -1,7 +1,7 @@
 /**
 * Assignment 3: CPU Scheduler
  * @file scheduler_priority.h
- * @author ??? (TODO: your name)
+ * @author Mitchell Karan
  * @brief This Scheduler class implements the Priority scheduling algorithm.
  * @version 0.1
  */
@@ -13,10 +13,18 @@
 #define ASSIGN3_SCHEDULER_PRIORITY_H
 
 #include "scheduler.h"
+#include <vector>
 
+/**
+ * @brief This Scheduler class implements a simple Priority Scheduling algorithm.
+ */
 class SchedulerPriority : public Scheduler {
 private:
-    // TODO: add necessary member variables here for your implementation
+    float ttime = 0;
+    float wtime = 0;
+    std::vector<PCB> ready_queue;  
+    std::vector<PCB> finished_processes;  //store finished processes
+    int current_time;  //simulation clock
 
 public:
     /**
@@ -47,8 +55,6 @@ public:
      *        It stops when all processes are finished.
      */
     void simulate() override;
-
 };
-
 
 #endif //ASSIGN3_SCHEDULER_PRIORITY_H

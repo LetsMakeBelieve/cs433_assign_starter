@@ -1,7 +1,7 @@
 /**
 * Assignment 3: CPU Scheduler
  * @file scheduler_priority_rr.h
- * @author ??? (TODO: your name)
+ * @author Mitchell Karan
  * @brief This Scheduler class implements the Priority RR scheduling algorithm.
  * @version 0.1
  */
@@ -12,19 +12,28 @@
 #define ASSIGN3_SCHEDULER_PRIORITY_RR_H
 
 #include "scheduler.h"
+#include <queue>
 
+/**
+ * @brief This Scheduler class implements the Round Robin scheduling algorithm with priority.
+ */
 class SchedulerPriorityRR : public Scheduler {
 private:
-    // TODO: add necessary member variables here for your implementation
+    float ttime = 0;
+    float wtime = 0;
+    std::vector<std::queue<PCB>> priority_queues; //queues for each priority level
+    int time_quantum;
+    int current_time;  //simulation clock
+    std::vector<PCB> finished_processes; //store finished processes for results
 
 public:
     /**
-     * @brief Construct a new SchedulerPriority object
+     * @brief Construct a new SchedulerPriorityRR object
      */
     SchedulerPriorityRR(int time_quantum = 10);
 
     /**
-     * @brief Destroy the SchedulerPriority object
+     * @brief Destroy the SchedulerPriorityRR object
      */
     ~SchedulerPriorityRR() override;
 
@@ -46,8 +55,6 @@ public:
      *        It stops when all processes are finished.
      */
     void simulate() override;
-
 };
-
 
 #endif //ASSIGN3_SCHEDULER_PRIORITY_RR_H
