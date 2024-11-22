@@ -14,7 +14,6 @@
 
 #include "replacement.h"
 #include <queue>
-#include <unordered_map>
 
 /**
  * @brief A class to simulate FIFO page replacement algorithm.
@@ -22,8 +21,6 @@
 class FIFOReplacement : public Replacement {
 private:
     std::queue<int> page_queue; //keep track of pages in FIFO order
-    std::unordered_map<int, int> page_table; //maps page number to frame index
-
 
 public:
     /**

@@ -10,15 +10,20 @@
 
 #include "pagetable.h"
 
-// TODO: Add your implementation of PageTable
-// Constrcutor
-// TODO: Add your code
+// Constructor
 PageTable::PageTable(int num_pages) {
-    
+    // Resize the vector to hold `num_pages` entries
+    pages.resize(num_pages);
+
+    // Initialize all pages with default values
+    for (int i = 0; i < num_pages; ++i) {
+        pages[i].frame_num = -1; // Indicates that no frame is assigned
+        pages[i].valid = false;  // Page is not in physical memory
+        pages[i].dirty = false; // Page has not been modified
+    }
 }
 
 // Destructor
-// TODO: Add your code
 PageTable::~PageTable() {
-    
+    // No dynamic memory to clean up since `std::vector` handles its own memory
 }

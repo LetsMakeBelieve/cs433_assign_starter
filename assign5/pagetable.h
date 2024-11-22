@@ -48,14 +48,20 @@ public:
     // Destructor
     ~PageTable();
 
-	// TODO: Add your implementation of the page table here
+	/**
+     * @brief Access a page in the page table by index.
+     * @param i Index of the page to access
+     * @return A reference to the corresponding PageEntry
+     */
+    PageEntry& operator[](int i) {
+        return pages[i];
+    }
 
     /**
-     * @brief Access a page in the page table.
-     * @param i
-     * @return
+     * @brief Get the number of pages in the table.
+     * @return Total number of pages
      */
-    PageEntry& operator [] (int i) {
-        return pages[i];
+    int size() const {
+        return pages.size();
     }
 };

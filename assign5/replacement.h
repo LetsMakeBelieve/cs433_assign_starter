@@ -11,7 +11,6 @@
 
 #include "pagetable.h"
 
-
 /**
  * @brief A base class to simulate page replacement algorithms.
  * A specific page replacement algorithm, e.g. FIFO or LRU, should be subclass of this.
@@ -20,8 +19,12 @@ class Replacement
 {
 protected:      // subclasses can access these members
     // Member variable for the page table
-    PageTable page_table;
-	// TODO: Add additional member variables to this class
+    PageTable page_table;            // Page table for the simulation
+    int num_frames;                  // Total number of available frames
+    int num_references = 0;          // Total number of page references
+    int num_page_faults = 0;         // Total number of page faults
+    int num_page_replacements = 0;   // Total number of page replacements
+    int free_frames = 0;             // Number of available frames
 	
 public:
 	/**
@@ -61,7 +64,7 @@ public:
      * It may be overridden in a subclass 
      * @param page_num The logical page number.
      */
-    virtual void load_page(int page_num) {}
+    virtual void load_page(int page_num);
 
 
     /**
