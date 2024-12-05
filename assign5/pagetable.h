@@ -24,12 +24,10 @@ using namespace std;
 class PageEntry
 {
 public:
-	// Physical frame number for a given page
+	//physical frame number for a given page
 	int frame_num;
-	// valid bit represents whether a page is in the physical memory
+	//valid bit represents whether a page is in the physical memory
 	bool valid = false;
-    // dirty bit represents whether a page is changed
-    bool dirty = false;
 };
 
 
@@ -63,5 +61,13 @@ public:
      */
     int size() const {
         return pages.size();
+    }
+
+    void set_valid(int page_num, bool valid) {
+        pages[page_num].valid = valid;
+    }
+
+    void set_frame(int page_num, int frame_num) {
+        pages[page_num].frame_num = frame_num;
     }
 };

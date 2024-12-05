@@ -19,44 +19,27 @@ Replacement::~Replacement() {}
 
 // Simulate a single page access
 bool Replacement::access_page(int page_num, bool is_write) {
-    ++num_references; // Increment total references
+    num_references++;  // Increment the count of references
 
-    PageEntry& entry = page_table[page_num];
-    if (entry.valid) {
-        // Page is already in memory
+    // If the page is valid, it calls the touch_page function.
+    if (page_table[page_num].valid) {
         touch_page(page_num);
-        if (is_write) {
-            entry.dirty = true; // Mark as dirty if this is a write access
-        }
-        return false; // No page fault
+        return false;  // no page fault
     }
-
-    // Page fault
-    ++num_page_faults;
-    if (free_frames > 0) {
-        // Free frames are available; load the page
+    // If the page is not valid but free frames are available, it calls the load_page function.
+    if (!page_table[page_num].valid && free_frames > 0) {
         load_page(page_num);
-        --free_frames;
-    } else {
-        // No free frames; replace a page
-        int victim_page = replace_page(page_num);
-        PageEntry& victim_entry = page_table[victim_page];
-
-        if (victim_entry.dirty) {
-            // Handle writing back the dirty page if needed
-            // (In a real system, this would involve writing to disk)
-        }
-
-        // Replace the victim with the new page
-        ++num_page_replacements;
-        load_page(page_num);
+        num_page_faults++;  // Increment the count of page faults
+        return true;  // page fault
     }
-
-    if (is_write) {
-        entry.dirty = true; // Mark as dirty if this is a write access
+    // If the page is not valid and there is no free frame, it calls the replace_page function.
+    if (!page_table[page_num].valid && free_frames == 0) {
+        replace_page(page_num);
+        num_page_replacements++;  // Increment the count of page replacements
+        num_page_faults++;  // Increment the count of page faults
+        return true;  // page fault
     }
-
-    return true; // Page fault occurred
+    return false;  // no page fault
 }
 
 // Load a page into a free frame

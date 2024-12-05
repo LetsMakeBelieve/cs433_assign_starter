@@ -5,7 +5,6 @@
  * @brief A class implementing the Last in First Out (LIFO) page replacement algorithms
  * @version 0.1
  */
-//You must complete the all parts marked as "TODO". Delete "TODO" after you are done.
 // Remember to add sufficient and clear comments to your code
 
 #include "lifo_replacement.h"
@@ -20,12 +19,16 @@ LIFOReplacement::~LIFOReplacement() {}
  * @brief Load a page into an available frame. Free frames are assumed to be available.
  */
 void LIFOReplacement::load_page(int page_num) {
-    // Push the page onto the stack (LIFO behavior)
-    page_stack.push(page_num);
+    PageEntry new_page; //make new page
+    new_page.valid = true; //page is valid
+    new_page.frame_num = next_frame_num; //set frame number as current
 
-    // Update the page table
-    page_table[page_num].frame_num = num_frames - free_frames; // Assign a frame
-    page_table[page_num].valid = true;                        // Mark as valid
+    page_stack.push(page_num); //add page number queue
+
+    free_frames--;//decrement free frames
+
+    page_table[page_num] = new_page; //update the page table
+    next_frame_num++; //increment next open frame number
 }
 
 /**
@@ -33,20 +36,22 @@ void LIFOReplacement::load_page(int page_num) {
  * @param page_num The page to be loaded.
  * @return The victim page that was replaced.
  */
-int LIFOReplacement::replace_page(int page_num) {
-    if (page_stack.empty()) {
-        throw std::runtime_error("No pages to replace: page stack is empty.");
-    }
+int LIFOReplacement::replace_page(int page_num) {//create a new page entry
+    PageEntry new_page; //make new page
+    new_page.valid = true; //page is valid
+    new_page.frame_num = next_frame_num; //set frame number as current
 
-    // Get the most recently added page (top of the stack)
-    int victim_page = page_stack.top();
-    page_stack.pop(); // Remove it from the stack
+    int victim_page_number = page_stack.top(); //get top of queue
+    page_stack.pop(); //remove page number from queue
 
-    // Invalidate the victim page in the page table
-    page_table[victim_page].valid = false;
+    //add to queue
+    page_stack.push(page_num);
 
-    // Load the new page into the stack
-    load_page(page_num);
+    //update page table
+    page_table[page_num] = new_page;
+    //set replaced page as invalid
+    page_table[victim_page_number].valid = false;
 
-    return victim_page; // Return the replaced page
+    //return the page number of the page to be replaced
+    return victim_page_number;
 }

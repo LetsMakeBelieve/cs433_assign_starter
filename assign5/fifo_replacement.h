@@ -21,6 +21,7 @@
 class FIFOReplacement : public Replacement {
 private:
     std::queue<int> page_queue; //keep track of pages in FIFO order
+    int next_frame_num = 0;
 
 public:
     /**

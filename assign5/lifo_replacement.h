@@ -5,7 +5,6 @@
  * @brief A class implementing the LIFO page replacement algorithms
  * @version 0.1
  */
-//You must complete the all parts marked as "TODO". Delete "TODO" after you are done.
 // Remember to add sufficient and clear comments to your code
 
 #pragma once
@@ -22,6 +21,7 @@
 class LIFOReplacement : public Replacement {
 private:
     std::stack<int> page_stack;
+    int next_frame_num = 0;
 
 public:
     /**
